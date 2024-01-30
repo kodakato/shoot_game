@@ -1,4 +1,5 @@
-use std::time::Duration;
+use std::{time::Duration};
+use rand::{thread_rng, Rng};
 
 use bevy::prelude::*;
 
@@ -14,9 +15,11 @@ fn main() {
         .insert_resource(Scoreboard { score: 0 })
         .add_systems(Startup, setup)
         .add_systems(Update, player_movement)
-        .add_systems(Update, spawn_enemy)
         .run();
 }
+
+#[derive(Resource)]
+struct Window;
 
 #[derive(Component)]
 struct MyCameraMarker;
@@ -113,23 +116,4 @@ fn player_movement(
     }
 }
 
-fn spawn_enemy(
-    mut commands: Commands,
-    time: Res<Time>,
-    mut spawn_timer: ResMut<EnemySpawnTimer>,
 
-) {
-    if spawn_timer.0.tick(time.delta()).just_finished() {
-        commands.spawn((
-            SpriteBundle {
-                sprite: Sprite {
-                    color: Color::rgb(1.0, 0.0, 0.0),
-                    custom_size: Some(ENEMY_SIZE),
-                    ..default()
-                },
-                ..default()
-            },
-            Enemy,
-        ));
-    }
-}
