@@ -4,7 +4,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .insert_resource(Scoreboard { score: 0 })
-        .add_systems(Startup, setup_camera)
+        .add_systems(Startup, setup)
         .run();
 }
 
@@ -17,12 +17,14 @@ struct Scoreboard {
     score: usize,
 }
 
-fn setup_camera(mut commands: Commands) {
-    commands.spawn((
-        Camera2dBundle {
-            transform: Transform::from_xyz(100.0, 200.0, 0.0),
-            ..default()
-        },
-        MyCameraMarker,
-    ));
+fn setup(
+    mut Commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
+    // Camera
+    commands.spawn(Camera2dBundle::default());
+
+    // Shoot Sound
+    
+
 }
