@@ -3,12 +3,12 @@ use bevy::prelude::*;
 #[derive(Component)]
 struct Collider;
 
-const LEFT_WALL: f32 = -500.0;
-const RIGHT_WALL: f32 = 500.0;
-const BOTTOM_WALL: f32 = -350.0;
-const TOP_WALL: f32 = 350.0;
-const WALL_THICKNESS: f32 = 10.0;
-const WALL_COLOR: Color = Color::rgb(0.5, 0.5, 0.5);
+pub const LEFT_WALL: f32 = -500.0;
+pub const RIGHT_WALL: f32 = 500.0;
+pub const BOTTOM_WALL: f32 = -350.0;
+pub const TOP_WALL: f32 = 350.0;
+pub const WALL_THICKNESS: f32 = 10.0;
+pub const WALL_COLOR: Color = Color::rgb(0.5, 0.5, 0.5);
 
 // This bundle is a collection of the components that define a "wall" in our game
 #[derive(Bundle)]

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-pub const MAX_ROTATION_SPEED: f32 = 10.0;
+pub const MAX_ROTATION_SPEED: f32 = 4.0;
 pub const MAX_SPEED: f32 = 100.0;
 pub const ACCELERATION: f32 = 400.0;
 pub const ROTATION_ACCELERATION: f32 = 20.0;
