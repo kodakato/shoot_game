@@ -14,7 +14,17 @@ pub fn player_movement(
         player.rotation_velocity += player.rotation_acceleration * time.delta_seconds();
     } else if input.pressed(KeyCode::Right) {
         player.rotation_velocity -= player.rotation_acceleration * time.delta_seconds();
+    } else { // Deceleration
+        let decel = ROTATION_DECELERATION * time.delta_seconds();
+        if player.rotation_velocity > decel {
+            player.rotation_velocity -= decel;
+        } else if player.rotation_velocity < -decel {
+            player.rotation_velocity += decel;
+        } else {
+            player.rotation_velocity = 0.0;
+        }
     }
+
     // Clamp to max rotation speed
     player.rotation_velocity = player.rotation_velocity.clamp(-MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
     // Apply rotation
