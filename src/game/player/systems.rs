@@ -1,53 +1,34 @@
 use bevy::prelude::*;
+use crate::game::movement::*;
 
-use super::components::*;
+use crate::game::movement::components::{Acceleration, AngularAcceleration, AngularVelocity, Velocity};
+use crate::game::movement::components::MovingObjectBundle;
 
+use super::components::Player;
+use super::*;
+
+// This function only sets the values for the player's movement. The actual movement is handled in the movement system.
 pub fn player_movement(
-    mut player_query: Query<(&mut Player, &mut Transform)>,
+    mut player_query: Query<(&mut Acceleration, &mut Transform, &mut AngularAcceleration, &mut AngularVelocity), With<Player>>,
     input: Res<Input<KeyCode>>,
-    time: Res<Time>,
 ) {
-    let (mut player, mut transform) = player_query.single_mut();
+    let (mut acceleration, transform, mut angular_acceleration, mut angular_velocity) = player_query.single_mut();
 
-    // Rotation acceleration and deceleration
-    if input.pressed(KeyCode::Left) {
-        player.rotation_velocity += player.rotation_acceleration * time.delta_seconds();
-    } else if input.pressed(KeyCode::Right) {
-        player.rotation_velocity -= player.rotation_acceleration * time.delta_seconds();
-    } else { // Deceleration
-        let decel = ROTATION_DECELERATION * time.delta_seconds();
-        if player.rotation_velocity > decel {
-            player.rotation_velocity -= decel;
-        } else if player.rotation_velocity < -decel {
-            player.rotation_velocity += decel;
-        } else {
-            player.rotation_velocity = 0.0;
-        }
+    // Accelerate forward
+    if input.pressed(ACCELERATE_KEY) {
+        acceleration.value = transform.rotation * Vec3::Y * ACCELERATION;
+    } else { // Stop accelerating
+        acceleration.value = Vec3::ZERO;
     }
 
-    // Clamp to max rotation speed
-    player.rotation_velocity = player.rotation_velocity.clamp(-MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
-    // Apply rotation
-    transform.rotate(Quat::from_rotation_z(player.rotation_velocity * time.delta_seconds()));
-
-
-    // Get forward vector
-    let forward = transform.rotation.mul_vec3(Vec3::Y);
-    let acceleration = player.acceleration;
-    // Acceleration        
-    if input.pressed(KeyCode::Down) {
-        player.velocity += forward * acceleration * time.delta_seconds();
-    } else { // Deceleration
-        let decel = 0.1 * time.delta_seconds();
-        let velocity = player.velocity;
-        if player.velocity.length() > decel {
-            player.velocity -= velocity.normalize() * decel;
-        } else {
-            player.velocity = Vec3::ZERO;
-        }
+    // Accelerate rotation 
+    if input.pressed(ROTATE_LEFT_KEY) {
+        angular_acceleration.value = ANGULAR_ACCELERATION;
+    } else if input.pressed(ROTATE_RIGHT_KEY) {
+        angular_acceleration.value = -ANGULAR_ACCELERATION;
+    } else { // Stop Rotation Acceleration
+        angular_acceleration.value = 0.0;
     }
-    // Apply movement
-    transform.translation += player.velocity * time.delta_seconds();
     
 }
 
@@ -56,24 +37,33 @@ pub fn spawn_player(
     asset_server: Res<AssetServer>
 ) {
     // Spawn Player
-    let player_texture = asset_server.load("sprites/rocket.png");
+    let player_sprite = asset_server.load("sprites/rocket.png");
     commands.spawn((
-        SpriteBundle {
-            texture: player_texture,
-            transform: Transform {
-                scale: PLAYER_SCALE,
-                translation: Vec3::new(0.0, 0.0, 0.0),
+        Name::from("Player"),
+        MovingObjectBundle {
+            sprite: SpriteBundle {
+                texture: player_sprite,
+                transform: Transform {
+                    scale: PLAYER_SCALE,
+                    translation: Vec3::new(0.0, 0.0, 0.0),
+                    ..default()
+                },
                 ..default()
             },
-            ..default()
+            velocity: Velocity::default(),
+            acceleration: Acceleration::default(),
+            angular_velocity: AngularVelocity::default(),
+            angular_acceleration: AngularAcceleration::default(),
         },
-        Player { 
-            max_speed: MAX_SPEED, 
-            acceleration: ACCELERATION, 
-            velocity: Vec3::ZERO,
-            rotation_velocity: 0.0,
-            rotation_acceleration: ROTATION_ACCELERATION,
-            health: 100,
-        },
+        Player,
     ));
+}
+
+pub fn despawn_player(
+    mut commands: Commands,
+    player_query: Query<Entity, With<Player>>,
+) {
+    for entity in player_query.iter() {
+        commands.entity(entity).despawn();
+    }
 }

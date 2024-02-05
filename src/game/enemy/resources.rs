@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-pub const ENEMY_SPAWN_TIME: f32 = 5.0;
+use super::components::*;
 
 #[derive(Resource)]
 pub struct EnemySpawnTimer(Timer);

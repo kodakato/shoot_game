@@ -5,6 +5,7 @@ mod camera;
 mod level;
 mod enemy;
 mod systems;
+mod movement;
 pub mod components;
 
 
@@ -21,6 +22,14 @@ impl Plugin for GamePlugin {
         .add_plugins(camera::CameraPlugin)
         .add_plugins(level::LevelPlugin)
         .add_plugins(enemy::EnemyPlugin)
+        .add_plugins(movement::MovementPlugin)
         .add_systems(OnEnter(AppState::InGame), toggle_simulation);
     }
 }
+
+#[derive(Component)]
+struct CollisionBox {
+    width: f32,
+    height: f32,
+}
+

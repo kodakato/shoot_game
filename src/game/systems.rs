@@ -7,7 +7,7 @@ pub fn toggle_simulation (
     keyboard_input: Res<Input<KeyCode>>,
     simulation_state: Res<State<SimulationState>>
 ) {
-    if keyboard_input.just_pressed(KeyCode::Escape) {
+    if keyboard_input.just_pressed(KeyCode::P) {
         match simulation_state.get() {
             SimulationState::Running => {
                 commands.insert_resource(NextState(Some(SimulationState::Paused)));
@@ -20,3 +20,5 @@ pub fn toggle_simulation (
         }
     }
 }
+
+

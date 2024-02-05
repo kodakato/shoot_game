@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
 // Enemy
-const ENEMY_SIZE: Vec2 = Vec2::new(20.0, 20.0);
-const ENEMY_SPAWN_SECONDS: u64 = 2;
+pub const ENEMY_SCALE: Vec3 = Vec3::new(0.1, 0.1, 0.0);
+pub const ENEMY_SPAWN_TIME: f32 = 2.0;
 
 #[derive(Component)]
-struct Enemy;
+pub struct Enemy;
