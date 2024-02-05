@@ -23,12 +23,11 @@ pub fn update_velocity(
     for (mut velocity, acceleration) in query.iter_mut() {
         let new_velocity = velocity.value + acceleration.value * time.delta_seconds();
         // Check if the velocity's magnitude exceeds the maximum speed
-        if new_velocity.length() > MAX_VELOCITY {
-            // If it does, scale it back to the maximum speed while preserving direction
-            velocity.value = velocity.value.normalize() * MAX_VELOCITY;
+        if new_velocity.length() > velocity.max {
+            velocity.value = new_velocity.normalize() * velocity.max;
         } else {
             velocity.value = new_velocity;
-        }   
+        }  
     }
 
 }
@@ -49,11 +48,14 @@ pub fn update_rotation_velocity (
     for (mut angular_velocity, angular_acceleration) in query.iter_mut() {
         // Accelerate rotation if there is an acceleration to the max acceleration speed, otherwise decelerate
         if angular_acceleration.value != 0.0 {
-            angular_velocity.value += angular_acceleration.value * time.delta_seconds(); 
-        } else { // Decelerate rotation
-            angular_velocity.value -= angular_velocity.value.signum() * time.delta_seconds() * ANGULAR_DECELERATION;
+            angular_velocity.value += angular_acceleration.value * time.delta_seconds();
+        } else {
+            let deceleration = angular_velocity.value.signum() * angular_velocity.max * ANGULAR_DECELERATION_SCALE * time.delta_seconds();
+            if deceleration.abs() < angular_velocity.value.abs() {
+                angular_velocity.value -= deceleration;
+            } else {
+                angular_velocity.value = 0.0;
+            }
         }
-
-        angular_velocity.value = angular_velocity.value.clamp(-MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
-    } 
+    }
 }
