@@ -17,9 +17,12 @@ pub struct EnemyPlugin;
 impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<EnemySpawnTimer>()
-        .add_systems(OnTransition{from: AppState::MainMenu, to: AppState::InGame},spawn_enemies)
+        .insert_resource(EnemySpawnTimer::default())
         .add_systems(OnTransition{from: AppState::InGame, to: AppState::MainMenu}, despawn_enemies)
-        .add_systems(Update, move_to_player.run_if(in_state(AppState::InGame)));
+        .add_systems(Update, (
+            move_to_player,
+            spawn_enemies,
+        ).run_if(in_state(AppState::InGame)));
     }
 }
 

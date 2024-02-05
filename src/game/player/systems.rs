@@ -52,7 +52,7 @@ pub fn spawn_player(
             },
             // TODO: Get each max working
             velocity: Velocity::default(),
-            acceleration: Acceleration::default().with_max(0.01),
+            acceleration: Acceleration::default(),
             angular_velocity: AngularVelocity::default(),
             angular_acceleration: AngularAcceleration::default(),
         },

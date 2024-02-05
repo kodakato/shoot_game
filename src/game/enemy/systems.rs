@@ -1,17 +1,31 @@
 
 
-use std::f64::consts::E;
+use std::ops::Range;
 
-use bevy::prelude::*; 
+use bevy::prelude::*;
+use rand::Rng; 
 
 use crate::game::{movement::{components::*, ACCELERATION, MAX_VELOCITY}, player::{self, components::*}};
 
-use super::{components::*, ALERT_DISTANCE, ENEMY_ACCELERATION, ENEMY_MAX_VELOCITY};
+use super::{components::*, EnemySpawnTimer, ALERT_DISTANCE, ENEMY_ACCELERATION, ENEMY_MAX_VELOCITY, ENEMY_SCALE};
+
+const SPAWN_X_RANGE: Range<f32> = -500.0..500.0;
+
 
 pub fn spawn_enemies(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
+    mut spawn_timer: ResMut<EnemySpawnTimer>,
+    time: Res<Time>,
 ) {
+    spawn_timer.timer.tick(time.delta());
+    if !spawn_timer.timer.just_finished() {
+        return;
+    }
+
+    let mut rng = rand::thread_rng();
+
+    let translation = Vec3::new(rng.gen_range(SPAWN_X_RANGE), 25.0, 0.0);
 
     // Spawn enemy
     let texture = asset_server.load("sprites/alien.png");
@@ -21,8 +35,8 @@ pub fn spawn_enemies(
             sprite: SpriteBundle {
                 texture: texture,
                 transform: Transform {
-                    scale: Vec3::splat(0.1),
-                    translation: Vec3::new(0.0, 0.0, 0.0),
+                    scale: ENEMY_SCALE,
+                    translation,
                     ..Default::default()
                 },
                 ..Default::default()
@@ -52,9 +66,9 @@ pub fn move_to_player(
     if let Ok(player_transform) = player_query.get_single(){
         for (mut acceleration, enemy_transform) in query.iter_mut() {
             // Only go to player if close enough
-            // if enemy_transform.translation.distance(player_transform.translation) > ALERT_DISTANCE {
-            //     continue;
-            // }
+            if enemy_transform.translation.distance(player_transform.translation) > ALERT_DISTANCE {
+                continue;
+            }
 
             // Calculate the direction vector from enemy to player
             let direction_to_player = player_transform.translation - enemy_transform.translation;

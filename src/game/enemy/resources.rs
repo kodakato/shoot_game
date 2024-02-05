@@ -3,10 +3,14 @@ use bevy::prelude::*;
 use super::{components::*, ENEMY_SPAWN_TIME};
 
 #[derive(Resource)]
-pub struct EnemySpawnTimer(Timer);
+pub struct EnemySpawnTimer{
+    pub timer: Timer,
+}
 
 impl Default for EnemySpawnTimer {
     fn default() -> EnemySpawnTimer {
-        EnemySpawnTimer(Timer::from_seconds(ENEMY_SPAWN_TIME, TimerMode::Repeating))
+        EnemySpawnTimer{
+            timer: Timer::from_seconds(ENEMY_SPAWN_TIME, TimerMode::Repeating)
+        }
     }
 }
