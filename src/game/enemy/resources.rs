@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use super::components::*;
+use super::{components::*, ENEMY_SPAWN_TIME};
 
 #[derive(Resource)]
 pub struct EnemySpawnTimer(Timer);

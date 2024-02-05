@@ -1,15 +1,18 @@
 
 
+use std::f64::consts::E;
+
 use bevy::prelude::*; 
 
 use crate::game::{movement::{components::*, ACCELERATION, MAX_VELOCITY}, player::{self, components::*}};
 
-use super::{components::*, ALERT_DISTANCE, ENEMY_ACCELERATION};
+use super::{components::*, ALERT_DISTANCE, ENEMY_ACCELERATION, ENEMY_MAX_VELOCITY};
 
-pub fn spawn_enemy(
+pub fn spawn_enemies(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
 ) {
+
     // Spawn enemy
     let texture = asset_server.load("sprites/alien.png");
     commands.spawn((
@@ -24,8 +27,8 @@ pub fn spawn_enemy(
                 },
                 ..Default::default()
             },
-            velocity: Velocity::new().with_max(MAX_VELOCITY * 0.01),
-            acceleration: Acceleration::new().with_max(ACCELERATION * 0.01),
+            velocity: Velocity::new().with_max(ENEMY_MAX_VELOCITY),
+            acceleration: Acceleration::new().with_max(ENEMY_ACCELERATION),
             angular_velocity: AngularVelocity::default(),
             angular_acceleration: AngularAcceleration::default(),
         },
@@ -54,7 +57,7 @@ pub fn move_to_player(
             // }
 
             // Calculate the direction vector from enemy to player
-            let direction_to_player = player_transform.translation - enemy_transform.translation * 1.5;
+            let direction_to_player = player_transform.translation - enemy_transform.translation;
             let direction_to_player_normalized = direction_to_player.normalize_or_zero();
 
             // Update the velocity to move towards the player
