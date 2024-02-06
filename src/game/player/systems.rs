@@ -4,7 +4,7 @@ use crate::game::movement::*;
 use crate::game::movement::components::{Acceleration, AngularAcceleration, AngularVelocity, Velocity};
 use crate::game::movement::components::MovingObjectBundle;
 
-use super::components::Player;
+use super::components::{Player, Projectile};
 use super::*;
 
 // This function only sets the values for the player's movement. The actual movement is handled in the movement system.
@@ -56,7 +56,7 @@ pub fn spawn_player(
             angular_velocity: AngularVelocity::default(),
             angular_acceleration: AngularAcceleration::default(),
         },
-        Player,
+        Player::default()
     ));
 }
 
@@ -66,5 +66,43 @@ pub fn despawn_player(
 ) {
     for entity in player_query.iter() {
         commands.entity(entity).despawn();
+    }
+}
+
+pub fn shoot_projectile (
+    mut commands: Commands,
+    player_query: Query<&Transform, With<Player>>,
+    input: Res<Input<KeyCode>>,
+) {
+    if !input.just_pressed(SHOOT_KEY) {
+        return;
+    }
+    if let Ok(player_transform) = player_query.get_single() {
+        // Get player direction
+        let direction = player_transform.rotation * Vec3::Y;
+
+        // Spawn projectile
+        commands.spawn((
+            Name::from("Projectile"),
+            MovingObjectBundle {
+                sprite: SpriteBundle {
+                    sprite: Sprite {
+                        color: Color::rgb(0.0, 100.0, 0.0),
+                        ..Default::default()
+                    },
+                    transform: Transform {
+                        scale: PROJECTILE_SIZE,
+                        translation: player_transform.translation,
+                        rotation: player_transform.rotation,
+                    },
+                    ..Default::default()
+                },
+                velocity: Velocity::new().with_value(direction * PROJECTILE_SPEED).with_max(PROJECTILE_SPEED),
+                acceleration: Acceleration::default(),
+                angular_velocity: AngularVelocity::default(),
+                angular_acceleration: AngularAcceleration::default(),
+            },
+            Projectile::shoot(direction),
+        ));
     }
 }

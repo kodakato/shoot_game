@@ -130,7 +130,7 @@ impl Default for AngularAcceleration {
     }
 }
 
-#[derive(Bundle)]
+#[derive(Bundle, Default)]
 pub struct MovingObjectBundle {
     pub velocity: Velocity,
     pub acceleration: Acceleration,

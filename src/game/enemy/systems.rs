@@ -80,5 +80,3 @@ pub fn move_to_player(
     }
 }
 
-
-
