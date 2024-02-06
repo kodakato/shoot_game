@@ -18,6 +18,7 @@ impl Plugin for EnemyPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<EnemySpawnTimer>()
         .insert_resource(EnemySpawnTimer::default())
+        .add_systems(OnTransition{from: AppState::MainMenu, to: AppState::InGame}, spawn_one_enemy)
         .add_systems(OnTransition{from: AppState::InGame, to: AppState::MainMenu}, despawn_enemies)
         .add_systems(Update, (
             move_to_player,

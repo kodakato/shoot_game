@@ -11,6 +11,32 @@ use super::{components::*, EnemySpawnTimer, ALERT_DISTANCE, ENEMY_ACCELERATION, 
 
 const SPAWN_X_RANGE: Range<f32> = -500.0..500.0;
 
+pub fn spawn_one_enemy(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
+    // Spawn enemy
+    let texture = asset_server.load("sprites/alien.png");
+    commands.spawn((
+        Name::from("Enemy"),
+        MovingObjectBundle {
+            sprite: SpriteBundle {
+                texture: texture,
+                transform: Transform {
+                    scale: ENEMY_SCALE,
+                    translation: Vec3::new(0.0, 25.0, 0.0),
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
+            velocity: Velocity::new().with_max(ENEMY_MAX_VELOCITY),
+            acceleration: Acceleration::new().with_max(ENEMY_ACCELERATION),
+            angular_velocity: AngularVelocity::default(),
+            angular_acceleration: AngularAcceleration::default(),
+        },
+       
+    ));
+}
 
 pub fn spawn_enemies(
     mut commands: Commands,

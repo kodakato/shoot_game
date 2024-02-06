@@ -21,6 +21,7 @@ pub const INVULNERABLE_TIME: f32 = 2.0;
 pub const PROJECTILE_DAMAGE: i32 = 10;
 pub const PROJECTILE_SPEED: f32 = 500.0;
 pub const PROJECTILE_SIZE: Vec3 = Vec3::new(1.0, 5.0, 0.1);
+pub const PROJECTILE_ACCELERATION: f32 = 1000.0;
 
 pub struct PlayerPlugin;
 

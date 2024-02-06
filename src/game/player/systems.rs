@@ -71,16 +71,18 @@ pub fn despawn_player(
 
 pub fn shoot_projectile (
     mut commands: Commands,
-    player_query: Query<&Transform, With<Player>>,
+    player_query: Query<(&Transform, &Velocity), With<Player>>,
     input: Res<Input<KeyCode>>,
 ) {
     if !input.just_pressed(SHOOT_KEY) {
         return;
     }
-    if let Ok(player_transform) = player_query.get_single() {
-        // Get player direction
+    if let Ok((player_transform, player_velocity))= player_query.get_single() {
+        // The project always has to leave the player greater than the player's velocity
+        // Calculate the direction of the projectile and velocity
         let direction = player_transform.rotation * Vec3::Y;
 
+        let velocity = player_velocity.value + direction * PROJECTILE_SPEED;
         // Spawn projectile
         commands.spawn((
             Name::from("Projectile"),
@@ -97,8 +99,8 @@ pub fn shoot_projectile (
                     },
                     ..Default::default()
                 },
-                velocity: Velocity::new().with_value(direction * PROJECTILE_SPEED).with_max(PROJECTILE_SPEED),
-                acceleration: Acceleration::default(),
+                velocity: Velocity::new().with_value(direction * PROJECTILE_SPEED), // This doesn't work right
+                acceleration: Acceleration::new().with_value(velocity.normalize() * PROJECTILE_ACCELERATION),
                 angular_velocity: AngularVelocity::default(),
                 angular_acceleration: AngularAcceleration::default(),
             },
@@ -106,3 +108,6 @@ pub fn shoot_projectile (
         ));
     }
 }
+
+// TODO: Despawn any projectiles that either exist for too long, or are too far from the player
+//pub fn despawn_projectiles 
