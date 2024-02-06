@@ -9,10 +9,10 @@ use super::*;
 
 // This function only sets the values for the player's movement. The actual movement is handled in the movement system.
 pub fn player_movement(
-    mut player_query: Query<(&mut Acceleration, &mut Transform, &mut AngularAcceleration, &mut AngularVelocity), With<Player>>,
+    mut player_query: Query<(&mut Acceleration, &Transform, &mut AngularAcceleration), With<Player>>,
     input: Res<Input<KeyCode>>,
 ) {
-    let (mut acceleration, transform, mut angular_acceleration, mut angular_velocity) = player_query.single_mut();
+    let (mut acceleration, transform, mut angular_acceleration) = player_query.single_mut();
 
     // Accelerate forward
     if input.pressed(ACCELERATE_KEY) {
