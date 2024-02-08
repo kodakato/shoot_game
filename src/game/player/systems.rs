@@ -1,10 +1,11 @@
+use bevy::ecs::entity;
 use bevy::prelude::*;
 use crate::game::movement::*;
 
 use crate::game::movement::components::{Acceleration, AngularAcceleration, AngularVelocity, Velocity};
 use crate::game::movement::components::MovingObjectBundle;
 
-use super::components::{Player, Projectile};
+use super::components::{LifeTimer, Player, Projectile};
 use super::*;
 
 // This function only sets the values for the player's movement. The actual movement is handled in the movement system.
@@ -105,9 +106,21 @@ pub fn shoot_projectile (
                 angular_acceleration: AngularAcceleration::default(),
             },
             Projectile::shoot(direction),
+            LifeTimer::new(PROJECTILE_LIFETIME),
         ));
     }
 }
 
-// TODO: Despawn any projectiles that either exist for too long, or are too far from the player
-//pub fn despawn_projectiles 
+// Despawn any projectiles that either exist for too long, or are too far from the player
+pub fn despawn_projectiles(
+    mut commands: Commands,
+    time: Res<Time>,
+    mut projectile_query: Query<(Entity, &mut LifeTimer), With<Projectile>>,
+) {
+    for (entity, mut life_timer) in projectile_query.iter_mut() {
+        // Update the timer
+        if life_timer.timer.tick(time.delta()).finished() {
+            commands.entity(entity).despawn();
+        } 
+    }
+}

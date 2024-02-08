@@ -8,6 +8,8 @@ use systems::*;
 
 use crate::AppState;
 
+use super::schedule::InGameSet;
+
 
 pub const ROTATE_LEFT_KEY: KeyCode = KeyCode::A;
 pub const ROTATE_RIGHT_KEY: KeyCode = KeyCode::D;
@@ -22,6 +24,7 @@ pub const PROJECTILE_DAMAGE: i32 = 10;
 pub const PROJECTILE_SPEED: f32 = 500.0;
 pub const PROJECTILE_SIZE: Vec3 = Vec3::new(1.0, 5.0, 0.1);
 pub const PROJECTILE_ACCELERATION: f32 = 1000.0;
+pub const PROJECTILE_LIFETIME: f32 = 2.0;
 
 pub struct PlayerPlugin;
 
@@ -30,9 +33,14 @@ impl Plugin for PlayerPlugin {
         app
         .add_systems(OnTransition{from: AppState::MainMenu, to: AppState::InGame}, spawn_player)
         .add_systems(OnExit(AppState::InGame), despawn_player)
-        .add_systems(Update, (
+        .add_systems(Update, ((
             player_movement,
             shoot_projectile,
-        ).run_if(in_state(AppState::InGame)));
+        ).in_set(InGameSet::UserInput))
+        .run_if(in_state(AppState::InGame)))
+        .add_systems(Update, ((
+            despawn_projectiles,
+        ).in_set(InGameSet::DespawnEntities))
+        .run_if(in_state(AppState::InGame)));
     }
 }

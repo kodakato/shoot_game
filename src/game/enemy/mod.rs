@@ -10,7 +10,7 @@ use crate::AppState;
 
 use self::systems::*;
 
-use super::{movement::{ACCELERATION, MAX_VELOCITY}, SimulationState};
+use super::{movement::{ACCELERATION, MAX_VELOCITY}, schedule::InGameSet, SimulationState};
 
 pub struct EnemyPlugin;
 
@@ -23,7 +23,8 @@ impl Plugin for EnemyPlugin {
         .add_systems(Update, (
             move_to_player,
             spawn_enemies,
-        ).run_if(in_state(AppState::InGame)));
+        ).in_set(InGameSet::EntityUpdates)
+        .run_if(in_state(AppState::InGame)));
     }
 }
 

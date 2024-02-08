@@ -7,6 +7,8 @@ use systems::*;
 
 use crate::AppState;
 
+use super::schedule::InGameSet;
+
 pub struct CameraPlugin;
 
 impl Plugin for CameraPlugin {
@@ -14,7 +16,8 @@ impl Plugin for CameraPlugin {
         app.add_systems(Startup, spawn_camera)
         .add_systems(Update, (
             centre_on_player.after(spawn_camera),
-        ).run_if(
+        ).in_set(InGameSet::EntityUpdates)
+        .run_if(
             in_state(AppState::InGame)
         ));
     }

@@ -6,6 +6,10 @@ pub mod components;
 
 use systems::*;
 
+use crate::AppState;
+
+use super::schedule::InGameSet;
+
 impl Plugin for MovementPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, (
@@ -13,7 +17,8 @@ impl Plugin for MovementPlugin {
             update_velocity, 
             update_rotation,
             update_rotation_velocity,
-        ));
+        ).in_set(InGameSet::EntityUpdates)
+        .run_if(in_state(AppState::InGame)));
     }
 }
 
