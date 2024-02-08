@@ -120,7 +120,7 @@ pub fn despawn_projectiles(
     for (entity, mut life_timer) in projectile_query.iter_mut() {
         // Update the timer
         if life_timer.timer.tick(time.delta()).finished() {
-            commands.entity(entity).despawn();
+            commands.entity(entity).despawn_recursive();
         } 
     }
 }
