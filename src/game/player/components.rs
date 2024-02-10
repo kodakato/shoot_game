@@ -5,17 +5,8 @@ use super::{PROJECTILE_DAMAGE, PROJECTILE_LIFETIME, PROJECTILE_SPEED, STARTING_H
 
 
 #[derive(Component)]
-pub struct Player {
-    pub health: Health,
-}
+pub struct Player;
 
-impl Default for Player {
-    fn default() -> Self {
-        Player {
-            health: Health::new(STARTING_HEALTH),
-        }
-    }
-}
 
 #[derive(Component)]
 pub struct Projectile {

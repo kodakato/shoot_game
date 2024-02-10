@@ -5,9 +5,9 @@ use std::ops::Range;
 use bevy::prelude::*;
 use rand::Rng; 
 
-use crate::game::{movement::{components::*, ACCELERATION, MAX_VELOCITY}, player::{self, components::*}};
+use crate::game::{collision::{self, components::{Collider, CollisionEvent}}, movement::{components::*, ACCELERATION, MAX_VELOCITY}, player::{self, components::*}, Health};
 
-use super::{components::*, EnemySpawnTimer, ALERT_DISTANCE, ENEMY_ACCELERATION, ENEMY_MAX_VELOCITY, ENEMY_SCALE};
+use super::{components::*, EnemySpawnTimer, ALERT_DISTANCE, ENEMY_ACCELERATION, ENEMY_COLLIDER_SIZE, ENEMY_MAX_VELOCITY, ENEMY_SCALE};
 
 const SPAWN_X_RANGE: Range<f32> = -500.0..500.0;
 
@@ -33,6 +33,7 @@ pub fn spawn_one_enemy(
             acceleration: Acceleration::new().with_max(ENEMY_ACCELERATION),
             angular_velocity: AngularVelocity::default(),
             angular_acceleration: AngularAcceleration::default(),
+            collider: Collider::new(ENEMY_COLLIDER_SIZE / 2.0),
         },
        
     ));
@@ -71,8 +72,10 @@ pub fn spawn_enemies(
             acceleration: Acceleration::new().with_max(ENEMY_ACCELERATION),
             angular_velocity: AngularVelocity::default(),
             angular_acceleration: AngularAcceleration::default(),
+            collider: Collider::new(20.0),
         },
         Enemy,
+        Health::new(1),
     ));
 }
 
@@ -106,3 +109,16 @@ pub fn move_to_player(
     }
 }
 
+pub fn enemy_touches_player (
+    mut collision_events: EventReader<CollisionEvent>,
+    mut player_health_query: Query<&mut Health, With<Player>>,
+) {
+    for &CollisionEvent{
+        entity,
+        collided_entity,
+    } in collision_events.read() {
+        if let Ok(mut health) = player_health_query.get_mut(collided_entity) {
+            health.amount -= 1;
+        }
+    }
+}

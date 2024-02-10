@@ -7,7 +7,7 @@ pub enum SimulationState {
     Paused,
 }
 
-#[derive(Resource)]
+#[derive(Component)]
 pub struct Health {
     pub amount: i32,
     pub max: i32,

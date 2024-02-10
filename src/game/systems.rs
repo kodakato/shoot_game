@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 
-use super::components::*;
+use crate::AppState;
+
+use super::{components::*, player::components::Player};
 
 pub fn toggle_simulation (
     mut commands: Commands,
@@ -20,5 +22,23 @@ pub fn toggle_simulation (
         }
     }
 }
+
+pub fn despawn_dead_entities(
+    mut commands: Commands,
+    query: Query<(Entity, &Health)>,
+    asset_server: Res<AssetServer>,
+) {
+    for (entity, health) in query.iter() {
+        if health.amount <= 0 {
+            commands.spawn(AudioBundle {
+                source: asset_server.load("sounds/explosion.ogg"),
+                settings: PlaybackSettings::DESPAWN,
+            });
+            commands.entity(entity).despawn_recursive();
+        }
+    }
+}
+
+
 
 

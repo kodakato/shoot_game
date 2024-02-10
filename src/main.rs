@@ -1,5 +1,6 @@
 
 use bevy::prelude::*;
+use bevy_audio::AudioPlugin;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
 mod main_menu;

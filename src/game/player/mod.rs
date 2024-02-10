@@ -19,6 +19,7 @@ pub const SHOOT_KEY: KeyCode = KeyCode::Space;
 pub const PLAYER_SCALE: Vec3 = Vec3::new(0.2,0.2,0.2);
 pub const STARTING_HEALTH: i32 = 100;
 pub const INVULNERABLE_TIME: f32 = 2.0;
+pub const PLAYER_COLLIDER_SIZE: f32 = 20.0;
 
 pub const PROJECTILE_DAMAGE: i32 = 10;
 pub const PROJECTILE_SPEED: f32 = 500.0;
@@ -34,8 +35,12 @@ impl Plugin for PlayerPlugin {
         .add_systems(OnTransition{from: AppState::MainMenu, to: AppState::InGame}, spawn_player)
         .add_systems(OnExit(AppState::InGame), despawn_player)
         .add_systems(Update, ((
-            player_movement,
-            shoot_projectile,
+            (
+                player_killed,
+                player_movement,
+                shoot_projectile,
+                projectile_touches_enemy,
+            ).chain()
         ).in_set(InGameSet::UserInput))
         .run_if(in_state(AppState::InGame)))
         .add_systems(Update, ((

@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use super::*;
+use crate::game::collision::components::Collider;
 
 #[derive(Component)]
 pub struct Velocity {
@@ -137,4 +138,5 @@ pub struct MovingObjectBundle {
     pub angular_velocity: AngularVelocity,
     pub angular_acceleration: AngularAcceleration,
     pub sprite: SpriteBundle,
+    pub collider: Collider,
 }

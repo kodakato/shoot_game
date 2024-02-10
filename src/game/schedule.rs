@@ -4,6 +4,6 @@ use bevy::prelude::*;
 pub enum InGameSet {
     UserInput,
     EntityUpdates,
-    CollissionDetection,
+    CollisionDetection,
     DespawnEntities,
 }

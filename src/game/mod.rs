@@ -8,6 +8,7 @@ mod systems;
 mod movement;
 pub mod components;
 mod schedule;
+mod collision;
 
 use components::*;
 use systems::*;
@@ -23,7 +24,7 @@ impl Plugin for GamePlugin {
         .configure_sets(Update, (
             InGameSet::UserInput,
             InGameSet::EntityUpdates,
-            InGameSet::CollissionDetection,
+            InGameSet::CollisionDetection,
             InGameSet::DespawnEntities,
         ).chain())
         .add_plugins(player::PlayerPlugin)
@@ -31,13 +32,13 @@ impl Plugin for GamePlugin {
         .add_plugins(level::LevelPlugin)
         .add_plugins(enemy::EnemyPlugin)
         .add_plugins(movement::MovementPlugin)
-        .add_systems(OnEnter(AppState::InGame), toggle_simulation);
+        .add_plugins(collision::CollisionPlugin)
+        .add_systems(OnEnter(AppState::InGame), toggle_simulation)
+        .add_systems(Update, (
+            despawn_dead_entities,
+        ).in_set(InGameSet::DespawnEntities)
+        .run_if(in_state(AppState::InGame)));
     }
 }
 
-#[derive(Component)]
-struct CollisionBox {
-    width: f32,
-    height: f32,
-}
 

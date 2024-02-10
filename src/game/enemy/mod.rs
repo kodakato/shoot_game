@@ -1,4 +1,4 @@
-mod components;
+pub mod components;
 mod resources;
 mod systems;
 
@@ -23,6 +23,7 @@ impl Plugin for EnemyPlugin {
         .add_systems(Update, (
             move_to_player,
             spawn_enemies,
+            enemy_touches_player,
         ).in_set(InGameSet::EntityUpdates)
         .run_if(in_state(AppState::InGame)));
     }
@@ -33,3 +34,4 @@ pub const ENEMY_MAX_VELOCITY: f32 = MAX_VELOCITY * 0.1;
 pub const ALERT_DISTANCE: f32 = 400.0;
 pub const ENEMY_SCALE: Vec3 = Vec3::new(0.1, 0.1, 0.0);
 pub const ENEMY_SPAWN_TIME: f32 = 2.0;
+pub const ENEMY_COLLIDER_SIZE: f32 = 20.0;
