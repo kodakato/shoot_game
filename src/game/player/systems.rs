@@ -39,7 +39,7 @@ pub fn spawn_player(
     asset_server: Res<AssetServer>
 ) {
     // Spawn Player
-    let player_sprite = asset_server.load("sprites/rocket.png");
+    let player_sprite = asset_server.load("sprites/ship.png");
     commands.spawn((
         Name::from("Player"),
         MovingObjectBundle {
@@ -77,6 +77,7 @@ pub fn shoot_projectile (
     mut commands: Commands,
     player_query: Query<(&Transform, &Velocity), With<Player>>,
     input: Res<Input<KeyCode>>,
+    asset_server: Res<AssetServer>,
 ) {
     if !input.just_pressed(SHOOT_KEY) {
         return;
@@ -112,6 +113,12 @@ pub fn shoot_projectile (
             Projectile::shoot(direction),
             LifeTimer::new(PROJECTILE_LIFETIME),
         ));
+
+        // Play sound
+        commands.spawn(AudioBundle {
+            source: asset_server.load("sounds/shoot.ogg"),
+            settings: PlaybackSettings::DESPAWN,
+        });
     }
 }
 
@@ -133,6 +140,8 @@ pub fn projectile_touches_enemy(
     mut collision_events: EventReader<CollisionEvent>,
     mut enemy_health_query: Query<&mut Health, With<Enemy>>,
     projectile_query: Query<(), With<Projectile>>,
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
 ) {
     for collision_event in collision_events.iter() {
         let CollisionEvent {
@@ -146,11 +155,24 @@ pub fn projectile_touches_enemy(
 
         // If it's a collision between a projectile and an enemy, reduce health
         if is_projectile_and_enemy {
+            let mut hp = 0;
             if let Ok(mut health) = enemy_health_query.get_mut(*collided_entity) {
                 health.amount -= 1;
+                hp = health.amount;
             } else if let Ok(mut health) = enemy_health_query.get_mut(*entity) {
                 // In case the collided_entity is the projectile and the entity is the enemy
                 health.amount -= 1;
+                hp = health.amount;
+            }
+            // Despawn the projectile
+            commands.entity(*collided_entity).despawn_recursive();
+
+            if hp > 0 {
+                // Play sound
+                commands.spawn(AudioBundle {
+                    source: asset_server.load("sounds/hit.ogg"),
+                    settings: PlaybackSettings::DESPAWN,
+                });
             }
         }
     }

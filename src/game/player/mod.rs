@@ -16,7 +16,7 @@ pub const ROTATE_RIGHT_KEY: KeyCode = KeyCode::D;
 pub const ACCELERATE_KEY: KeyCode = KeyCode::W;
 pub const SHOOT_KEY: KeyCode = KeyCode::Space;
 
-pub const PLAYER_SCALE: Vec3 = Vec3::new(0.2,0.2,0.2);
+pub const PLAYER_SCALE: Vec3 = Vec3::new(0.5,0.5,0.0);
 pub const STARTING_HEALTH: i32 = 100;
 pub const INVULNERABLE_TIME: f32 = 2.0;
 pub const PLAYER_COLLIDER_SIZE: f32 = 20.0;
