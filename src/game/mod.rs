@@ -9,6 +9,7 @@ mod movement;
 pub mod components;
 mod schedule;
 mod collision;
+mod projectile;
 
 use components::*;
 use systems::*;

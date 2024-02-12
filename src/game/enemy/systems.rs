@@ -7,7 +7,7 @@ use rand::Rng;
 
 use crate::game::{collision::{self, components::{Collider, CollisionEvent}}, movement::{components::*, ACCELERATION, MAX_VELOCITY}, player::{self, components::*}, Health};
 
-use super::{components::*, EnemySpawnTimer, ALERT_DISTANCE, ENEMY_ACCELERATION, ENEMY_COLLIDER_SIZE, ENEMY_MAX_VELOCITY, ENEMY_SCALE};
+use super::{components::*, EnemySpawnTimer, ALERT_DISTANCE, ENEMY_ACCELERATION, ENEMY_COLLIDER_SIZE, ENEMY_HEALTH, ENEMY_MAX_VELOCITY, ENEMY_SCALE};
 
 const SPAWN_X_RANGE: Range<f32> = -500.0..500.0;
 
@@ -75,7 +75,7 @@ pub fn spawn_enemies(
             collider: Collider::new(20.0),
         },
         Enemy,
-        Health::new(1),
+        Health::new(ENEMY_HEALTH),
     ));
 }
 

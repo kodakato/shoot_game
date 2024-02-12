@@ -42,3 +42,13 @@ pub fn exit_game (
         app_exit_event_writer.send(AppExit);
     }
 }
+
+pub fn play_background_music(
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
+) {
+    commands.spawn(AudioBundle {
+        source: asset_server.load("sounds/music/level1.ogg"),
+        settings: PlaybackSettings::LOOP,
+    });
+}

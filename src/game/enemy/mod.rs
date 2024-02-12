@@ -35,3 +35,4 @@ pub const ALERT_DISTANCE: f32 = 400.0;
 pub const ENEMY_SCALE: Vec3 = Vec3::new(0.1, 0.1, 0.0);
 pub const ENEMY_SPAWN_TIME: f32 = 2.0;
 pub const ENEMY_COLLIDER_SIZE: f32 = 20.0;
+pub const ENEMY_HEALTH: i32 = 10;

@@ -39,13 +39,8 @@ impl Plugin for PlayerPlugin {
                 player_killed,
                 player_movement,
                 shoot_projectile,
-                projectile_touches_enemy,
             ).chain()
         ).in_set(InGameSet::UserInput))
-        .run_if(in_state(AppState::InGame)))
-        .add_systems(Update, ((
-            despawn_projectiles,
-        ).in_set(InGameSet::DespawnEntities))
         .run_if(in_state(AppState::InGame)));
     }
 }
