@@ -48,13 +48,14 @@ pub fn build_main_menu(
                     style: Style {
                         width: Val::Px(200.0),
                         height: Val::Px(50.0),
+                        ..default()
                     },
                     background_color: Color::GREEN.into(),
                     ..default()
                 },
                 PlayButton,
             )
-        ).with_children(|parent|
+        ).with_children(|parent| {
             parent.spawn(TextBundle {
                 text: Text {
                     sections: vec![
@@ -68,11 +69,13 @@ pub fn build_main_menu(
                         },
                     ],
                     alignment: TextAlignment::Center,
+                    ..default()
                 },
                 ..default()
                 }
-            )
-        )
+            );
+        }
+        );
         // Quit Button
     }
     )
