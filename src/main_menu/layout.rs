@@ -55,6 +55,27 @@ pub fn build_main_menu(
                 },
                 ..default()
             }
+        ).with_children(|parent| {
+                parent.spawn(
+                    //Text
+                    TextBundle {
+                        text: Text {
+                            sections: vec! [
+                                TextSection {
+                                    value: "Space Shooter".to_string(),
+                                    style: TextStyle {
+                                        font_size: 60.0,
+                                        color: Color::WHITE,
+                                        ..default()
+                                    },
+                                }
+                            ],
+                            ..default()
+                        },
+                        ..default()
+                    }
+                );
+            }
         );
 
         // Play Button
