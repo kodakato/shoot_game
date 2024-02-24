@@ -1,11 +1,9 @@
-
-
 use std::ops::Range;
 
 use bevy::prelude::*;
 use rand::Rng; 
 
-use crate::game::{collision::{self, components::{Collider, CollisionEvent}}, movement::{components::*, ACCELERATION, MAX_VELOCITY}, player::{self, components::*}, Health};
+use crate::game::{collision::{components::{Collider, CollisionEvent}}, movement::{components::*}, player::{components::*}, Health};
 
 use super::{components::*, EnemySpawnTimer, ALERT_DISTANCE, ENEMY_ACCELERATION, ENEMY_COLLIDER_SIZE, ENEMY_HEALTH, ENEMY_MAX_VELOCITY, ENEMY_SCALE};
 

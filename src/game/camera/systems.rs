@@ -1,7 +1,5 @@
 use bevy::prelude::*;
-use bevy::window::PrimaryWindow;
 
-use crate::game::movement::components::*;
 use crate::game::player::components::Player;
 
 use super::components::*;

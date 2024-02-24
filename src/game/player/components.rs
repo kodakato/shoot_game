@@ -1,7 +1,4 @@
 use bevy::prelude::*;
-use crate::game::{movement::components::{MovingObjectBundle, Velocity}, Health};
-
-use super::{PROJECTILE_DAMAGE, PROJECTILE_LIFETIME, PROJECTILE_SPEED, STARTING_HEALTH};
 
 
 #[derive(Component)]

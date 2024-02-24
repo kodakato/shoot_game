@@ -1,8 +1,7 @@
 use bevy::prelude::*;
 
-use crate::AppState;
 
-use super::{components::*, player::components::Player};
+use super::{components::*};
 
 pub fn toggle_simulation (
     mut commands: Commands,

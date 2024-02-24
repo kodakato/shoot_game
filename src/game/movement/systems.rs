@@ -1,8 +1,4 @@
-use std::f32::MAX;
-
 use bevy::prelude::*;
-
-use crate::game::player::*;
 
 use super::components::*;
 use super::*;

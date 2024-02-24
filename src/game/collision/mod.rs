@@ -16,14 +16,14 @@ impl Plugin for CollisionPlugin {
         .add_systems(Update, (
             collision_detection.in_set(InGameSet::CollisionDetection),
         ))
-        .add_systems(Update, (
+        .add_systems(Update, 
             (
                 handle_collisions::<Enemy>,
                 handle_collisions::<Player>,
             )
             .chain()
             .in_set(InGameSet::EntityUpdates)
-        ));
+        );
     }
 }
 

@@ -1,7 +1,5 @@
-use bevy::ecs::entity;
 use bevy::prelude::*;
-use crate::game::collision::components::{Collider, CollisionEvent};
-use crate::game::enemy::components::Enemy;
+use crate::game::collision::components::{Collider};
 use crate::game::{movement::*, Health};
 
 use crate::game::movement::components::{Acceleration, AngularAcceleration, AngularVelocity, Velocity};

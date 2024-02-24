@@ -10,7 +10,7 @@ use crate::AppState;
 
 use self::systems::*;
 
-use super::{movement::{ACCELERATION, MAX_VELOCITY}, schedule::InGameSet, SimulationState};
+use super::{movement::{ACCELERATION, MAX_VELOCITY}, schedule::InGameSet};
 
 pub struct EnemyPlugin;
 
