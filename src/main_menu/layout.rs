@@ -30,6 +30,9 @@ pub fn build_main_menu(
                 width: Val::Percent(100.0),
                 height: Val::Percent(100.0),
                 flex_direction: FlexDirection::Column,
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                row_gap: Val::Px(10.0),
                 ..default()
             },
             background_color: Color::RED.into(),
@@ -40,14 +43,29 @@ pub fn build_main_menu(
     )
     .with_children(|parent| {
         // Title
+        parent.spawn(
+            NodeBundle {
+                style: Style {
+                    flex_direction: FlexDirection::Row,
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
+                    width: Val::Px(400.0),
+                    height: Val::Px(100.0),
+                    ..default()
+                },
+                ..default()
+            }
+        );
 
         // Play Button
         parent.spawn(
             (
                 ButtonBundle {
                     style: Style {
-                        width: Val::Px(200.0),
+                        width: Val::Px(150.0),
                         height: Val::Px(50.0),
+                        justify_content: JustifyContent::Center,
+                        align_items: AlignItems::Center,
                         ..default()
                     },
                     background_color: Color::GREEN.into(),
@@ -62,9 +80,9 @@ pub fn build_main_menu(
                         TextSection {
                             value: "Play".to_string(),
                             style: TextStyle {
-                                font: asset_server.load("fonts/FiraSans-Bold.ttf"),
                                 font_size: 40.0,
                                 color: Color::WHITE,
+                                ..default()
                             },
                         },
                     ],
@@ -76,7 +94,45 @@ pub fn build_main_menu(
             );
         }
         );
+
         // Quit Button
+        parent.spawn(
+            (
+                ButtonBundle {
+                    style: Style {
+                        width: Val::Px(150.0),
+                        height: Val::Px(50.0),
+                        justify_content: JustifyContent::Center,
+                        align_items: AlignItems::Center,
+                        ..default()
+                    },
+                    background_color: Color::GREEN.into(),
+                    ..default()
+                },
+                QuitButton,
+            )
+        ).with_children(|parent| {
+            parent.spawn(TextBundle {
+                text: Text {
+                    sections: vec![
+                        TextSection {
+                            value: "Quit".to_string(),
+                            style: TextStyle {
+                                font_size: 40.0,
+                                color: Color::WHITE,
+                                ..default()
+                            },
+                        },
+                    ],
+                    alignment: TextAlignment::Center,
+                    ..default()
+                },
+                ..default()
+                }
+            );
+        }
+        );
+
     }
     )
     .id();
