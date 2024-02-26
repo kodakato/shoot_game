@@ -8,4 +8,3 @@ pub struct PlayButton;
 
 #[derive(Component)]
 pub struct QuitButton;
-

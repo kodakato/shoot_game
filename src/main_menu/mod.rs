@@ -18,6 +18,13 @@ impl Plugin for MainMenuPlugin {
                 Update,
                 (interact_with_play_button, interact_with_quit_button)
                     .run_if(in_state(AppState::MainMenu)),
+            )
+            .add_systems(
+                OnTransition {
+                    from: AppState::MainMenu,
+                    to: AppState::InGame,
+                },
+                despawn_main_menu,
             );
     }
 }
