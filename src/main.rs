@@ -17,8 +17,7 @@ fn main() {
         .add_plugins(MainMenuPlugin)
         .add_plugins(GamePlugin)
         .add_plugins(WorldInspectorPlugin::new())
-        .add_systems(Update, exit_game)
-        .add_systems(Update, (transition_to_game_state, transition_to_main_menu_state,))
+        .add_systems(Update, transition_to_main_menu_state)
         .add_systems(Startup, play_background_music)
         .run();
 }
