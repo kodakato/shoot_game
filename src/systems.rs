@@ -18,8 +18,7 @@ pub fn transition_to_main_menu_state(
 
 pub fn play_background_music(asset_server: Res<AssetServer>, mut commands: Commands) {
     commands.spawn(AudioBundle {
-        source: asset_server.load("sounds/music/level1.ogg"),
+        source: asset_server.load("sounds/music/music.ogg"),
         settings: PlaybackSettings::LOOP,
     });
 }
-

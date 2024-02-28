@@ -1,13 +1,13 @@
-
 use bevy::prelude::*;
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
-mod main_menu;
+mod debug;
 mod game;
+mod main_menu;
 mod systems;
 
-use main_menu::MainMenuPlugin;
+use debug::DebugPlugin;
 use game::GamePlugin;
+use main_menu::MainMenuPlugin;
 use systems::*;
 
 fn main() {
@@ -16,7 +16,7 @@ fn main() {
         .add_state::<AppState>()
         .add_plugins(MainMenuPlugin)
         .add_plugins(GamePlugin)
-        .add_plugins(WorldInspectorPlugin::new())
+        .add_plugins(DebugPlugin)
         .add_systems(Update, transition_to_main_menu_state)
         .add_systems(Startup, play_background_music)
         .run();
@@ -29,8 +29,3 @@ enum AppState {
     InGame,
     GameOver,
 }
-
-
-
-
-
